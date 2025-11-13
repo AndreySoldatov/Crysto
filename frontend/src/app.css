@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+@plugin 'daisyui' {
+    themes: light --default, dark;
+}
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+.h-dvh {
+    height: 100dvh;
+}
+
+@supports (min-height: 100dvh) {
+    .min-h-dvh {
+        min-height: 100dvh;
+    }
+}
