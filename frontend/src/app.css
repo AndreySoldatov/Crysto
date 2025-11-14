@@ -1,8 +1,45 @@
 @import 'tailwindcss';
 
 @plugin 'daisyui' {
-    themes: light --default, dark;
+    themes: light --default, amoled;
 }
+
+@plugin "daisyui/theme" {
+    name: "amoled";
+    default: false;
+    prefersdark: false;
+    color-scheme: "dark";
+    --color-base-100: oklch(10% 0.005 285.823);
+    --color-base-200: oklch(22% 0.005 285.823);
+    --color-base-300: oklch(22% 0.006 285.885);
+    --color-base-content: oklch(98% 0.001 106.423);
+    --color-primary: oklch(58% 0.233 277.117);
+    --color-primary-content: oklch(96% 0.018 272.314);
+    --color-secondary: oklch(65% 0.241 354.308);
+    --color-secondary-content: oklch(94% 0.028 342.258);
+    --color-accent: oklch(77% 0.152 181.912);
+    --color-accent-content: oklch(38% 0.063 188.416);
+    --color-neutral: oklch(14% 0.005 285.823);
+    --color-neutral-content: oklch(92% 0.004 286.32);
+    --color-info: oklch(74% 0.16 232.661);
+    --color-info-content: oklch(29% 0.066 243.157);
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(37% 0.077 168.94);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(41% 0.112 45.904);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
+
+
 
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
@@ -15,4 +52,76 @@
     .min-h-dvh {
         min-height: 100dvh;
     }
+}
+
+.tiptap {
+    h1 {
+        @apply text-4xl font-semibold my-4
+    }
+
+    h2 {
+        @apply text-3xl font-semibold my-4
+    }
+
+    h3 {
+        @apply text-2xl font-semibold my-4
+    }
+
+    hr {
+        @apply text-base-content/10 my-4
+    }
+
+    p {
+        @apply my-4
+    }
+
+    ul {
+        @apply list-disc ml-6 my-4
+    }
+
+    ol {
+        @apply list-decimal ml-6 my-4
+    }
+
+    li p {
+        @apply my-0
+    }
+
+    pre {
+        @apply bg-base-200 p-2 rounded-md border border-base-content/10 my-4
+    }
+
+    blockquote {
+        @apply border-l-4 pl-4 border-base-content/10 my-4
+    }
+
+    blockquote p {
+        @apply my-0
+    }
+
+    code {
+        @apply border p-0.5 px-1 rounded-md border-base-content/10 bg-base-200
+    }
+
+    pre code {
+        @apply p-0 border-none
+    }
+
+    ul input[type="checkbox"] {
+        @apply checkbox
+    }
+
+    ul[data-type="taskList"] {
+        @apply list-none ml-0
+    }
+
+    ul[data-type="taskList"] li {
+        @apply flex flex-row gap-2 my-2
+    }
+
+    ul[data-type="taskList"] li[data-checked="true"] div p {
+        @apply line-through text-base-content/25
+    }
+
+    @apply bg-transparent outline-none focus:ring-0 focus:outline-none
 }

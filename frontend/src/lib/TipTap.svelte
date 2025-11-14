@@ -2,6 +2,20 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import { StarterKit } from '@tiptap/starter-kit';
+	import { TaskList, TaskItem } from '@tiptap/extension-list';
+	import {
+		List,
+		ListOrdered,
+		Bold,
+		Italic,
+		Underline,
+		Strikethrough,
+		Code,
+		TextQuote,
+		ListChecks,
+		Plus,
+		Image
+	} from '@lucide/svelte';
 
 	let bubbleMenu = $state();
 	let element = $state();
@@ -10,7 +24,15 @@
 	onMount(() => {
 		editorState.editor = new Editor({
 			element: element as Element,
-			extensions: [StarterKit],
+			extensions: [
+				StarterKit.configure({
+					heading: {
+						levels: [1, 2, 3]
+					}
+				}),
+				TaskList,
+				TaskItem
+			],
 			content: `
         <h1>Hello Svelte! 🌍️ </h1>
         <p>This editor is running in Svelte.</p>
@@ -29,34 +51,151 @@
 
 <div style="position: relative" class="app">
 	{#if editorState.editor}
-		<div class="fixed-menu">
-			<button
-				onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-				class:active={editorState.editor.isActive('heading', { level: 1 })}
+		<div
+			class="fixed top-14 left-0 z-30 flex w-full flex-row items-center justify-center gap-2 pr-2"
+		>
+			<div
+				class="flex w-full flex-row flex-nowrap gap-2 overflow-x-auto rounded-br-md border border-base-content/10 bg-base-100 p-2 shadow-base-content/5 md:w-auto md:rounded-b-md"
 			>
-				H1
-			</button>
-			<button
-				onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-				class:active={editorState.editor.isActive('heading', { level: 2 })}
-			>
-				H2
-			</button>
-			<button
-				onclick={() => editorState.editor?.chain().focus().setParagraph().run()}
-				class:active={editorState.editor.isActive('paragraph')}
-			>
-				P
-			</button>
+				<div class="join">
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleBold().run()}
+						class={editorState.editor.isActive('bold')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Bold class="h-4 w-4" />
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleItalic().run()}
+						class={editorState.editor.isActive('italic')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Italic class="h-4 w-4" />
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleUnderline().run()}
+						class={editorState.editor.isActive('underline')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Underline class="h-4 w-4" />
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleStrike().run()}
+						class={editorState.editor.isActive('strike')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Strikethrough class="h-4 w-4" />
+					</button>
+				</div>
+				<div class="join">
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+						class={editorState.editor.isActive('heading', { level: 1 })
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						H1
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+						class={editorState.editor.isActive('heading', { level: 2 })
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						H2
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+						class={editorState.editor.isActive('heading', { level: 3 })
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						H3
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().setParagraph().run()}
+						class={editorState.editor.isActive('paragraph')
+							? 'btn join-item px-3 shadow-none btn-primary'
+							: 'btn join-item px-3'}
+					>
+						P
+					</button>
+				</div>
+				<div class="join">
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleBulletList().run()}
+						class={editorState.editor.isActive('bulletList')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<List class="h-4 w-4" />
+					</button>
+
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleOrderedList().run()}
+						class={editorState.editor.isActive('orderedList')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<ListOrdered class="h-4 w-4" />
+					</button>
+
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleTaskList().run()}
+						class={editorState.editor.isActive('taskList')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<ListChecks class="h-4 w-4" />
+					</button>
+				</div>
+				<div class="join">
+					<button
+						onclick={() =>
+							editorState.editor?.state.selection.empty
+								? editorState.editor?.chain().focus().toggleCodeBlock().run()
+								: editorState.editor?.chain().focus().toggleCode().run()}
+						class={editorState.editor.isActive('codeBlock') || editorState.editor.isActive('code')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Code class="h-4 w-4" />
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleBlockquote().run()}
+						class={editorState.editor.isActive('blockquote')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<TextQuote class="h-4 w-4" />
+					</button>
+				</div>
+			</div>
+
+			<div class="dropdown dropdown-end">
+				<button tabindex="0" class="btn btn-circle">
+					<Plus class="h-5" />
+				</button>
+				<ul
+					tabindex="-1"
+					class="dropdown-content menu z-1 mt-4 rounded-md border border-base-content/10 bg-base-100 p-2"
+				>
+					<li>
+						<button class="btn flex flex-row justify-start">
+							<Image class="h-4" />
+							Image
+						</button>
+					</li>
+				</ul>
+			</div>
 		</div>
 	{/if}
-
-	<div bind:this={element}></div>
+	<div
+		bind:this={element}
+		class="my-10 bg-transparent p-0 leading-relaxed outline-none focus:ring-0 focus:outline-none"
+	></div>
 </div>
-
-<style>
-	button.active {
-		background: black;
-		color: white;
-	}
-</style>

@@ -2,6 +2,8 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
+	import { Sun, Moon, LayoutDashboard } from '@lucide/svelte';
+
 	let { children } = $props();
 </script>
 
@@ -9,69 +11,52 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="mx-auto flex min-h-dvh min-h-screen w-full max-w-4xl flex-col">
-	<header class="flex w-full items-center justify-between p-4 px-6 print:hidden">
-		<!-- <div class="flex flex-row gap-x-2">
-			<a class="text-2xl font-semibold" href="/">Crysto</a>
-		</div> -->
+<div class="mx-auto flex min-h-screen w-full max-w-4xl flex-col">
+	<header
+		class="sticky top-0 z-45 flex w-full items-center justify-between border-b border-base-content/10 bg-base-100 p-2 px-4 print:hidden"
+	>
 		<a href="/" class="text-xl font-semibold">Crysto</a>
 		<div class="flex flex-row gap-x-2">
-			<a class="btn border-base-content/10 btn-outline" href="/dashboard">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard h-5"
-					><rect width="7" height="9" x="3" y="3" rx="1" /><rect
-						width="7"
-						height="5"
-						x="14"
-						y="3"
-						rx="1"
-					/><rect width="7" height="9" x="14" y="12" rx="1" /><rect
-						width="7"
-						height="5"
-						x="3"
-						y="16"
-						rx="1"
-					/></svg
-				>
+			<a class="btn btn-ghost" href="/dashboard">
+				<LayoutDashboard class="h-5" />
 				Dashboard
 			</a>
 		</div>
 
-		<div class="dropdown dropdown-end">
-			<div class="avatar" tabindex="0" role="button">
-				<div class="w-10 rounded-full hover:brightness-70">
-					<img
-						src="https://www.looper.com/img/gallery/why-aangs-power-in-avatar-the-last-airbender-is-more-terrifying-than-you-think/l-intro-1616420787.jpg"
-						alt="Avatar"
-					/>
+		<div class="flex flex-row items-center gap-4">
+			<label class="swap swap-rotate">
+				<input type="checkbox" class="theme-controller hidden" value="amoled" />
+
+				<Sun class="swap-on h-5 text-base-content/50" />
+
+				<Moon class="swap-off h-5 text-base-content/50" />
+			</label>
+
+			<div class="dropdown dropdown-end">
+				<div class="avatar" tabindex="0" role="button">
+					<div class="w-8 rounded-full hover:brightness-70">
+						<img
+							src="https://www.looper.com/img/gallery/why-aangs-power-in-avatar-the-last-airbender-is-more-terrifying-than-you-think/l-intro-1616420787.jpg"
+							alt="Avatar"
+						/>
+					</div>
 				</div>
-			</div>
-			<ul
-				tabindex="-1"
-				class="dropdown-content menu z-1 rounded-box border border-base-content/10 bg-base-100 p-2"
-			>
-				<a class="btn justify-end text-right btn-ghost" href="/account">Account</a>
-				<a class="btn justify-end text-right btn-ghost" href="/settings">Settings</a>
-				<button
-					class="btn justify-end text-right text-error btn-ghost btn-error hover:text-error-content"
-					>Logout</button
+				<ul
+					tabindex="-1"
+					class="dropdown-content menu z-50 rounded-box border border-base-content/10 bg-base-100 p-2"
 				>
-			</ul>
+					<a class="btn justify-end text-right btn-ghost" href="/account">Account</a>
+					<a class="btn justify-end text-right btn-ghost" href="/settings">Settings</a>
+					<button
+						class="btn justify-end text-right text-error btn-ghost btn-error hover:text-error-content"
+						>Logout</button
+					>
+				</ul>
+			</div>
 		</div>
 	</header>
 
-	<div class="mx-4 mb-8 border-b border-base-content/10 print:hidden"></div>
-
-	<div class="flex w-full flex-1 flex-col items-center">
+	<div class="my-10 flex w-full flex-1 flex-col items-center">
 		{@render children()}
 	</div>
 

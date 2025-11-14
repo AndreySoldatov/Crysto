@@ -3,7 +3,7 @@
 		<span class="text-3xl font-semibold">Crysto</span>
 	</div>
 	<p>
-		Book writing app for security paranoids. We store only your login in plain text form, everything
+		Note taking app for security paranoids. We store only your login in plain text form, everything
 		else is
 		<a
 			class="text-primary underline"

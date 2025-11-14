@@ -38,7 +38,9 @@
 		"vite": "^7.1.10"
 	},
 	"dependencies": {
+		"@lucide/svelte": "^0.553.0",
 		"@tiptap/core": "^3.10.7",
+		"@tiptap/extension-list": "^3.10.7",
 		"@tiptap/pm": "^3.10.7",
 		"@tiptap/starter-kit": "^3.10.7",
 		"daisyui": "^5.4.7"
