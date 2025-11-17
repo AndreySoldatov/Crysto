@@ -1,6 +1,10 @@
+<script lang="ts">
+	import Decypher from '$lib/DecypherRand.svelte';
+</script>
+
 <div class="flex w-1/2 min-w-80 flex-col gap-6 p-8">
 	<div class="flex flex-col items-center">
-		<span class="text-3xl font-semibold">Crysto</span>
+		<Decypher value={'Crysto'} classes="text-3xl font-semibold hover:scale-110 transition" />
 	</div>
 	<p>
 		Note taking app for security paranoids. We store only your login in plain text form, everything

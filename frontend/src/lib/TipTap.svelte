@@ -134,10 +134,10 @@
 <div style="position: relative" class="app">
 	{#if editorState.editor}
 		<div
-			class="fixed top-14 left-0 z-30 flex w-full flex-row items-center justify-center gap-2 pr-2"
+			class="fixed top-14 left-0 z-30 flex w-full flex-row items-center justify-center gap-2 pr-2 md:pr-0"
 		>
 			<div
-				class="flex w-full flex-row flex-nowrap gap-2 overflow-x-auto rounded-br-md border border-base-content/10 bg-base-100 p-2 shadow-base-content/5 md:w-auto md:rounded-b-md"
+				class="no-scrollbar flex w-full flex-row flex-nowrap gap-2 overflow-x-auto rounded-br-md border border-base-content/10 bg-base-100 p-2 shadow-base-content/5 md:w-auto md:rounded-b-md"
 			>
 				<div class="join">
 					<button

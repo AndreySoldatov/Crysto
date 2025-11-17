@@ -105,7 +105,7 @@
     }
 
     pre code {
-        @apply p-0 border-none
+        @apply p-0 border-none text-sm
     }
 
     ul input[type="checkbox"] {
@@ -383,4 +383,16 @@
 
 [data-theme="amoled"] .tiptap mark {
     @apply bg-blue-500/50 text-base-content
+}
+
+@layer utilities {
+    .no-scrollbar {
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari */
+    }
 }

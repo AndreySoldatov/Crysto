@@ -10,7 +10,7 @@
 	const tags = ['this', 'tag-list', 'test'];
 </script>
 
-<div class="mt-18 flex w-full flex-col gap-4 px-8 md:w-xl md:px-4">
+<div class="mt-18 flex w-full flex-col gap-4 px-4 md:w-xl md:px-2">
 	<div class="flex flex-row justify-between">
 		<p class="text-sm text-base-content/40">
 			Modified: {modified}
@@ -26,7 +26,15 @@
 		type="text"
 		value={title}
 		placeholder="Title"
-		class="border-none bg-transparent p-0 text-4xl font-semibold caret-primary outline-none placeholder:text-base-content/30 focus:ring-0 focus:outline-none"
+		class="h-14 border-none bg-transparent p-0 text-4xl font-semibold caret-primary outline-none placeholder:text-base-content/30 focus:ring-0 focus:outline-none"
+		onkeydown={(e) => {
+			if (e.key == 'Enter') {
+				e.preventDefault();
+				e.stopPropagation();
+				let editor: HTMLElement | null = document.querySelector('[role="textbox"]');
+				editor?.focus();
+			}
+		}}
 	/>
 	<main>
 		<TipTap />
