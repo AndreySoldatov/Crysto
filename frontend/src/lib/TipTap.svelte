@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
+	import { Placeholder } from '@tiptap/extensions';
 	import { StarterKit } from '@tiptap/starter-kit';
 	import { TaskList, TaskItem } from '@tiptap/extension-list';
 	import {
@@ -14,8 +16,17 @@
 		TextQuote,
 		ListChecks,
 		Plus,
-		Image
+		Image,
+		Highlighter,
+		Link as lnk
 	} from '@lucide/svelte';
+	import { all, createLowlight } from 'lowlight';
+	import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
+	import Highlight from '@tiptap/extension-highlight';
+	import Typography from '@tiptap/extension-typography';
+	import Link from '@tiptap/extension-link';
+
+	const lowlight = createLowlight(all);
 
 	let bubbleMenu = $state();
 	let element = $state();
@@ -31,17 +42,88 @@
 					}
 				}),
 				TaskList,
-				TaskItem
+				TaskItem,
+				CodeBlockLowlight.configure({
+					lowlight,
+					tabSize: 4
+				}),
+				Highlight.configure({
+					multicolor: false
+				}),
+				Placeholder.configure({
+					placeholder: 'Write something...'
+				}),
+				Typography,
+				Link.configure({
+					openOnClick: true,
+					autolink: true,
+					defaultProtocol: 'https',
+					protocols: ['http', 'https'],
+					isAllowedUri: (url, ctx) => {
+						try {
+							// construct URL
+							const parsedUrl = url.includes(':')
+								? new URL(url)
+								: new URL(`${ctx.defaultProtocol}://${url}`);
+
+							// use default validation
+							if (!ctx.defaultValidate(parsedUrl.href)) {
+								return false;
+							}
+
+							// disallowed protocols
+							const disallowedProtocols = ['ftp', 'file', 'mailto'];
+							const protocol = parsedUrl.protocol.replace(':', '');
+
+							if (disallowedProtocols.includes(protocol)) {
+								return false;
+							}
+
+							// only allow protocols specified in ctx.protocols
+							const allowedProtocols = ctx.protocols.map((p) =>
+								typeof p === 'string' ? p : p.scheme
+							);
+
+							if (!allowedProtocols.includes(protocol)) {
+								return false;
+							}
+
+							// disallowed domains
+							const disallowedDomains = ['example-phishing.com', 'malicious-site.net'];
+							const domain = parsedUrl.hostname;
+
+							if (disallowedDomains.includes(domain)) {
+								return false;
+							}
+
+							// all checks have passed
+							return true;
+						} catch {
+							return false;
+						}
+					},
+					shouldAutoLink: (url) => {
+						try {
+							// construct URL
+							const parsedUrl = url.includes(':') ? new URL(url) : new URL(`https://${url}`);
+
+							// only auto-link if the domain is not in the disallowed list
+							const disallowedDomains = ['example-no-autolink.com', 'another-no-autolink.com'];
+							const domain = parsedUrl.hostname;
+
+							return !disallowedDomains.includes(domain);
+						} catch {
+							return false;
+						}
+					}
+				})
 			],
-			content: `
-        <h1>Hello Svelte! 🌍️ </h1>
-        <p>This editor is running in Svelte.</p>
-        <p>Select some text to see the bubble menu popping up.</p>
-      `,
+			content: '',
 			onTransaction: ({ editor }) => {
 				// Increment the state signal to force a re-render
 				editorState = { editor };
-			}
+			},
+			autofocus: true
 		});
 	});
 	onDestroy(() => {
@@ -89,6 +171,14 @@
 							: 'btn join-item px-2'}
 					>
 						<Strikethrough class="h-4 w-4" />
+					</button>
+					<button
+						onclick={() => editorState.editor?.chain().focus().toggleHighlight().run()}
+						class={editorState.editor.isActive('highlight')
+							? 'btn join-item px-2 shadow-none btn-primary'
+							: 'btn join-item px-2'}
+					>
+						<Highlighter class="h-4 w-4" />
 					</button>
 				</div>
 				<div class="join">
@@ -196,6 +286,6 @@
 	{/if}
 	<div
 		bind:this={element}
-		class="my-10 bg-transparent p-0 leading-relaxed outline-none focus:ring-0 focus:outline-none"
+		class="bg-transparent p-0 leading-relaxed caret-primary outline-none focus:ring-0 focus:outline-none"
 	></div>
 </div>

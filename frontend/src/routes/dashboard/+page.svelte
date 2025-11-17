@@ -1,4 +1,6 @@
 <script lang="ts">
+	import TagList from '$lib/TagList.svelte';
+
 	const sampleData = [
 		{
 			title: 'Hello World gsdfdsfsd',
@@ -6,70 +8,80 @@
 				'This is descriptionsdfdsf sdfsdfsd dfsdffsdf sdf sdfsdf dfs sdfsdf sdf sdf sdfsd fsdfsdfsd',
 			timestamp: '20:32 12.06.2025',
 			favorite: true,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: ['this', 'is', 'tag-list', 'test', 'more', 'even more', 'even even more']
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description of a novel',
 			timestamp: '20:32 12.06.2025',
 			favorite: true,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: ['this', 'also', 'tag-list']
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: false,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: false,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
-			title: 'Hello World',
+			title: '',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: true,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: false,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description of a novel',
 			timestamp: '20:32 12.06.2025',
 			favorite: true,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: false,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: false,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		},
 		{
 			title: 'Hello World',
 			description: 'This is description',
 			timestamp: '20:32 12.06.2025',
 			favorite: true,
-			slug: 'hello-world'
+			slug: 'hello-world',
+			tags: []
 		}
 	];
 	const favorites = sampleData.filter((data) => data.favorite);
@@ -77,9 +89,11 @@
 </script>
 
 <div class="flex w-full flex-col gap-4 px-4">
-	<div class="flex flex-col gap-4 md:flex-row">
+	<div
+		class="sticky top-14 z-44 flex flex-col gap-4 border-b border-base-content/10 bg-base-100 p-4 md:w-full md:flex-row md:justify-center"
+	>
 		<div class="flex flex-row gap-4">
-			<button class="btn">
+			<button class="btn btn-primary">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -93,7 +107,7 @@
 					class="lucide lucide-plus-icon lucide-plus h-5"
 					><path d="M5 12h14" /><path d="M12 5v14" /></svg
 				>
-				Create
+				New
 			</button>
 			<div class="join">
 				<select class="select join-item w-35">
@@ -108,28 +122,35 @@
 				</select>
 			</div>
 		</div>
-		<label class="input w-full gap-0 md:w-70">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="lucide lucide-search-icon lucide-search h-5 text-base-content/50"
-				><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg
-			>
-			<input
-				type="search"
-				placeholder="filter"
-				class="grow focus:ring-0 focus:outline-none focus-visible:outline-none"
-			/>
-		</label>
+		<div class="join">
+			<label class="input join-item w-full gap-0 md:w-70">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-search-icon lucide-search h-5 text-base-content/50"
+					><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg
+				>
+				<input
+					type="search"
+					placeholder="filter"
+					class="grow focus:ring-0 focus:outline-none focus-visible:outline-none"
+				/>
+			</label>
+			<select class="select join-item w-25">
+				<option selected>Name</option>
+				<option>Body</option>
+				<option>Tags</option>
+				<option>Anything</option>
+			</select>
+		</div>
 	</div>
-	<div class="divider">Favorites</div>
 	<div class="flex w-full flex-col gap-4 divide-y md:grid md:grid-cols-3 md:items-start">
 		{#each favorites as sd}
 			<div
@@ -153,9 +174,13 @@
 									><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg
 								>
 							</button>
-							<a class="font-semibold" href="/notes/{sd.slug}">
-								{sd.title}
-							</a>
+							{#if sd.title}
+								<a class="font-semibold" href="/notes/{sd.slug}">
+									{sd.title}
+								</a>
+							{:else}
+								<a class="font-semibold text-base-content/40" href="/notes/{sd.slug}"> No title </a>
+							{/if}
 						</div>
 						<button
 							class="btn h-auto min-h-0 w-auto min-w-0 p-0 btn-link"
@@ -184,6 +209,7 @@
 						{sd.description}
 					</p>
 				</div>
+				<TagList tags={sd.tags} />
 				<div class="flex w-full flex-row items-center justify-between">
 					<p class="text-sm text-base-content/50">{sd.timestamp}</p>
 					<button class="btn text-error no-underline btn-ghost"> Delete </button>
@@ -191,6 +217,5 @@
 			</div>
 		{/each}
 	</div>
-	<div class="divider">Other</div>
 	<p class="text-5xl text-error">TODO</p>
 </div>

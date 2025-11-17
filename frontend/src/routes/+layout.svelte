@@ -5,6 +5,16 @@
 	import { Sun, Moon, LayoutDashboard } from '@lucide/svelte';
 
 	let { children } = $props();
+
+	var light_theme = true;
+	function switch_theme() {
+		if (light_theme) {
+			document.documentElement.setAttribute('data-theme', 'amoled');
+		} else {
+			document.documentElement.setAttribute('data-theme', 'light');
+		}
+		light_theme = !light_theme;
+	}
 </script>
 
 <svelte:head>
@@ -25,7 +35,12 @@
 
 		<div class="flex flex-row items-center gap-4">
 			<label class="swap swap-rotate">
-				<input type="checkbox" class="theme-controller hidden" value="amoled" />
+				<input
+					type="checkbox"
+					class="theme-controller hidden"
+					value="amoled"
+					onclick={switch_theme}
+				/>
 
 				<Sun class="swap-on h-5 text-base-content/50" />
 
@@ -56,7 +71,7 @@
 		</div>
 	</header>
 
-	<div class="my-10 flex w-full flex-1 flex-col items-center">
+	<div class="flex w-full flex-1 flex-col items-center">
 		{@render children()}
 	</div>
 

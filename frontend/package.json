@@ -40,9 +40,17 @@
 	"dependencies": {
 		"@lucide/svelte": "^0.553.0",
 		"@tiptap/core": "^3.10.7",
+		"@tiptap/extension-code-block-lowlight": "^3.10.7",
+		"@tiptap/extension-highlight": "^3.10.7",
+		"@tiptap/extension-link": "^3.10.7",
 		"@tiptap/extension-list": "^3.10.7",
+		"@tiptap/extension-table-of-contents": "^3.10.7",
+		"@tiptap/extension-typography": "^3.10.7",
+		"@tiptap/extensions": "^3.10.7",
 		"@tiptap/pm": "^3.10.7",
 		"@tiptap/starter-kit": "^3.10.7",
-		"daisyui": "^5.4.7"
+		"daisyui": "^5.4.7",
+		"lowlight": "^3.3.0",
+		"tailwind-scrollbar": "^4.0.2"
 	}
 }
