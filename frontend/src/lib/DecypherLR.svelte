@@ -39,4 +39,4 @@
 	});
 </script>
 
-<p on:mouseenter={onEnter} class={classes}>{currentValue}</p>
+<p on:mouseenter={onEnter} class="{classes} select-none">{currentValue}</p>

@@ -70,7 +70,7 @@
 			<div class="dropdown dropdown-end">
 				<div class="avatar" tabindex="0" role="button">
 					<div
-						class="h-8 w-auto rounded-full transition hover:scale-105 hover:brightness-70 active:scale-95 active:brightness-50"
+						class="h-8 w-auto rounded-full transition select-none hover:scale-105 hover:brightness-70 active:scale-95 active:brightness-50"
 					>
 						<img
 							src="https://www.looper.com/img/gallery/why-aangs-power-in-avatar-the-last-airbender-is-more-terrifying-than-you-think/l-intro-1616420787.jpg"

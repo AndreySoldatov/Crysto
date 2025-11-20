@@ -13,7 +13,7 @@
 	{:else}
 		{#each tags as tag}
 			<div
-				class="flex flex-row items-center gap-2 rounded-full bg-primary/8 p-1 pl-3 text-sm font-semibold text-primary"
+				class="flex flex-row items-center gap-2 rounded-full bg-primary/8 p-1 pl-3 text-sm font-semibold text-primary select-none"
 			>
 				{tag}
 				<div class="btn btn-circle h-5 w-5 btn-ghost btn-primary"><X class="h-4" /></div>

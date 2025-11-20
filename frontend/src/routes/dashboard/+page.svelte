@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TagList from '$lib/TagList.svelte';
-	import { Bookmark, X } from '@lucide/svelte';
+	import { Bookmark, X, Plus, Search } from '@lucide/svelte';
 
 	const sampleData = [
 		{
@@ -89,25 +89,17 @@
 	const nonfavorites = sampleData.filter((data) => !data.favorite);
 </script>
 
+<svelte:head>
+	<title>Dashboard</title>
+</svelte:head>
+
 <div class="flex w-full flex-col md:gap-4">
 	<div
 		class="sticky top-14 z-44 flex flex-col gap-4 border-b border-base-content/10 bg-base-100 p-4 md:w-full md:flex-row md:justify-between"
 	>
-		<div class="flex flex-row gap-4">
-			<button class="btn btn-primary">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="lucide lucide-plus-icon lucide-plus h-5"
-					><path d="M5 12h14" /><path d="M12 5v14" /></svg
-				>
+		<div class="flex flex-row justify-between gap-4">
+			<button class="btn pl-3 btn-primary">
+				<Plus class="h-5" />
 				New
 			</button>
 			<div class="join">
@@ -125,21 +117,9 @@
 		</div>
 		<div class="flex items-center gap-2">
 			<a href="/search-help" class="btn btn-circle h-6 w-6 text-base-content/50">?</a>
-			<div class="join">
-				<label class="input join-item w-full gap-0 md:w-70">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-search-icon lucide-search h-5 text-base-content/50"
-						><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg
-					>
+			<div class="join w-full">
+				<label class="input join-item gap-0 md:w-70">
+					<Search class="h-5 text-base-content/50" />
 					<input
 						type="search"
 						placeholder="filter"
@@ -164,7 +144,7 @@
 							<Bookmark
 								fill="currentColor"
 								stroke="currentColor"
-								class="h-5 text-amber-400 transition duration-100 ease-in-out hover:h-7 hover:rotate-12"
+								class="h-5 text-amber-400 transition duration-100 ease-in-out hover:scale-110 hover:rotate-12"
 							/>
 						</button>
 						{#if sd.title}
@@ -189,5 +169,4 @@
 			</div>
 		{/each}
 	</div>
-	<!-- <p class="text-5xl text-error">TODO</p> -->
 </div>
