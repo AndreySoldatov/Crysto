@@ -4,6 +4,8 @@ use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::{Level, error, info};
 use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
+use crate::config::EnvConfig;
+
 mod auth;
 mod config;
 
@@ -19,13 +21,14 @@ fn init_tracing() {
 #[derive(Clone)]
 struct AppState {
     dbpool: PgPool,
+    config: EnvConfig,
 }
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
     init_tracing();
-    let env_config = envy::from_env::<config::EnvConfig>().unwrap();
+    let env_config = envy::from_env::<EnvConfig>().unwrap();
 
     let dbpool = PgPool::connect(&env_config.database_url).await;
     if let Err(e) = dbpool {
@@ -34,6 +37,7 @@ async fn main() {
     }
     let appstate = AppState {
         dbpool: dbpool.unwrap(),
+        config: env_config.clone(),
     };
     info!(db_url = %env_config.database_url, "Database connected");
 
@@ -42,8 +46,8 @@ async fn main() {
         .fallback(|| async { "Hello from Crysto API!" })
         .layer(
             TraceLayer::new_for_http()
-                .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
-                .on_response(DefaultOnResponse::new().level(Level::INFO)),
+                .make_span_with(DefaultMakeSpan::new().level(Level::DEBUG))
+                .on_response(DefaultOnResponse::new().level(Level::DEBUG)),
         )
         .with_state(appstate);
 
