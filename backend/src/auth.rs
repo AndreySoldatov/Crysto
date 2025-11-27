@@ -6,8 +6,8 @@ use argon2::{
 };
 use axum::{
     Json, Router,
-    extract::{Query, State},
-    http::StatusCode,
+    extract::{FromRequestParts, Query, State},
+    http::{StatusCode, header},
     response::IntoResponse,
     routing::{get, post},
 };
@@ -16,7 +16,7 @@ use axum_extra::extract::{
     cookie::{Cookie, SameSite},
 };
 use base64::{Engine, prelude::BASE64_STANDARD};
-use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, errors::ErrorKind};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
@@ -30,6 +30,7 @@ pub fn auth_router() -> Router<AppState> {
         .route("/signup", post(signup))
         .route("/check-username", get(check_username))
         .route("/login", post(login))
+        .route("/protected", get(protected))
 }
 
 #[derive(Deserialize)]
@@ -234,4 +235,58 @@ fn validate_jwt(secret: &[u8], token: &str) -> jsonwebtoken::errors::Result<Clai
         &Validation::default(),
     )
     .map(|t| t.claims)
+}
+
+struct AuthorizedUser(i64);
+
+impl<S> FromRequestParts<S> for AuthorizedUser
+where
+    S: Send + Sync,
+    State<AppState>: FromRequestParts<S>,
+{
+    type Rejection = (StatusCode, &'static str);
+
+    async fn from_request_parts(
+        parts: &mut axum::http::request::Parts,
+        state: &S,
+    ) -> Result<Self, Self::Rejection> {
+        let State(AppState { config, .. }) = State::from_request_parts(parts, state)
+            .await
+            .map_err(|_e| (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error"))?;
+
+        let jwt_str = parts
+            .headers
+            .get(header::AUTHORIZATION)
+            .ok_or((StatusCode::UNAUTHORIZED, "No authorization header"))?
+            .to_str()
+            .map_err(|_| (StatusCode::UNAUTHORIZED, "Invalid header format"))?
+            .strip_prefix("Bearer ")
+            .ok_or((StatusCode::UNAUTHORIZED, "Invalid header format"))?;
+
+        let claims =
+            validate_jwt(config.jwt_secret.as_bytes(), jwt_str).map_err(|e| match e.kind() {
+                ErrorKind::ExpiredSignature => (StatusCode::UNAUTHORIZED, "Token expired"),
+                _ => (StatusCode::UNAUTHORIZED, "Token validation error"),
+            })?;
+
+        // Unwrap here because if JWT passed validation, then I'm sure that
+        // my server issued it and the sub field is the appropriate numeric type
+        Ok(AuthorizedUser(claims.sub.parse().unwrap()))
+    }
+}
+
+async fn protected(
+    AuthorizedUser(user_id): AuthorizedUser,
+    State(appstate): State<AppState>,
+) -> Result<impl IntoResponse, StatusCode> {
+    let (username,): (String,) = sqlx::query_as("SELECT username FROM users WHERE id = $1")
+        .bind(user_id)
+        .fetch_one(&appstate.dbpool)
+        .await
+        .map_err(|e| {
+            error!(error = %e, "Error fetching username from the database");
+            StatusCode::INTERNAL_SERVER_ERROR
+        })?;
+
+    Ok(format!("Hello, {username}!"))
 }
